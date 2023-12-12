@@ -1,10 +1,10 @@
-import './App.css';
+import {useState} from 'react';
+import axios from 'axios';
+import getRegionClass from './helpers/getRegionClass.js';
+import formatPopulation from './helpers/formatPopulation.js';
 import worldMap from './assets/world_map.png';
 import spinningGlobe from './assets/spinning-globe.gif';
-import {useState} from 'react';
-import getRegionClass from './helpers/getRegionClass.js';
-import axios from 'axios';
-import formatPopulation from './helpers/formatPopulation.js';
+import './App.css';
 
 function App() {
     const [countries, setCountries] = useState([]);
@@ -37,10 +37,12 @@ function App() {
         try {
             // probeer de gegevens over dit land op te halen
             const response = await axios.get(`https://restcountries.com/v3.1/name/${searchQuery}`);
+            // wanneer je de gegevens bekijkt, zul je zien dat data een array is met lengte 1. Om alleen het object op te slaan, gebruiken we [0]
             const country = response.data[0];
             console.log(country);
-
+            // sla de informatie van dat land op in de state
             setCountryInfo(country);
+            // maak het invoerveld weer leeg
             setSearchQuery('');
         } catch (e) {
             console.error(e);
@@ -55,21 +57,24 @@ function App() {
                 <img src={worldMap} alt="Kaart van alle contintenten in de wereld" className="world-map"/>
             </header>
             <main>
-                <section className="page-section">
-                        <h2>World Regions</h2>
-                        {countries.length > 0 ?
-                            <ul className="country-list">
-                                {countries.map((country) => {
-                                    return (<li key={country.name.common}>
+                <section className="page-section-column">
+                    <h2>World Regions</h2>
+                    {countries.length > 0
+                        ? <ul className="country-list">
+                            {countries.map((country) => {
+                                return (
+                                    <li key={country.name.common}>
                                         <img src={country.flags.svg} alt={`Vlag van ${country.name.common}`} className="flag"/>
                                         <span className={getRegionClass(country.region)}>{country.name.common}</span>
                                         <p className="population">Has a population of {country.population} people</p>
-                                    </li>)
-                                })}
-                            </ul>
-                            : <button type="button" onClick={fetchCountries}>Alle landen ophalen</button>}
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                        : <button type="button" onClick={fetchCountries}>Alle landen ophalen</button>
+                    }
                 </section>
-                <section>
+                <section className="page-section-column">
                     <h2>Search country information</h2>
                     <img src={spinningGlobe} alt="Spinng globe"/>
                     <form className="search-form" onSubmit={handleSubmit}>
@@ -103,4 +108,4 @@ function App() {
     )
 }
 
-export default App
+export default App;

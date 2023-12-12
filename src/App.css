@@ -1,9 +1,8 @@
-.page-section {
+.page-section-column {
     display: flex;
     flex-direction: column;
-    flex-basis: 1000px;
-    flex-grow: 0;
-    flex-shrink: 1;
+    justify-content: center;
+    padding: 50px 0;
 }
 
 .country-list {
@@ -57,6 +56,10 @@
 }
 
 /*DEEL 2*/
+
+.search-form {
+    margin: 0 auto;
+}
 
 .search-form button {
     text-transform: uppercase;
